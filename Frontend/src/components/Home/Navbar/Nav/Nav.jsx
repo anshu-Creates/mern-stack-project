@@ -3,14 +3,14 @@ import Button from '../../../Button'
 
 const Nav = () => {
   return (
-    <div className='w-[60%] place-content-center'>
-        <ul className='flex text-2xl align-middle justify-between'>
-            <li>Home</li>
-            <li>Services</li>
-            <li>Reviews</li>
-            <li>About</li>
-            <li>Contact</li>
-            <Button/>
+    <div className='w-[60%]'>
+        <ul className='flex text-xl items-center justify-between'>
+            <li className='hover:text-blue-500 hover:translate-0.5  cursor-pointer duration-400'><a href="#">Home</a></li>
+            <li className='hover:text-blue-500 hover:translate-0.5  cursor-pointer duration-400'><a href="#">Services</a></li>
+            <li className='hover:text-blue-500 hover:translate-0.5  cursor-pointer duration-400'><a href="#">Reviews</a></li>
+            <li className='hover:text-blue-500 hover:translate-0.5  cursor-pointer duration-400'><a href="#">About</a></li>
+            <li className='hover:text-blue-500 hover:translate-0.5  cursor-pointer duration-400'><a href="#">Contact</a></li>
+            <Button title='Logout'/>
         </ul>
     </div>
   )
