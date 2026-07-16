@@ -1,10 +1,10 @@
 import React from 'react'
 import Header from '../Header'
 
-const Contact = () => {
+const About = () => {
   return (
     <div className='bg-white px-5 py-10'>
-        <Header h1='CONTACT' h2='US'/>
+        <Header h1='ABOUT' h2='US'/>
         <div className='flex justify-around font-mono'>
             <img src="/src/assets/f1.png" alt="Contact" className='mx-10 h-50 w-80'/>
             <div className='px-25 w-4xl'>
@@ -17,4 +17,4 @@ const Contact = () => {
   )
 }
 
-export default Contact
+export default About
