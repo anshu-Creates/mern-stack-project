@@ -24,7 +24,7 @@ const Footer = () => {
         <h4 className="text-2xl text-center mb-2 text-blue-900 font-bold">
           About Us
         </h4>
-        <p className="text-justify text-blue-800">
+        <p className="text-center text-blue-800">
           Welcome to Balaji Repair & Services, where innovation meets excellence. We are a passionate team dedicated to providing top-notch Washing Machine, Microwave, Fridge, AC Repair. Our mission is to deliver high-quality solutions that cater to your needs, ensuring efficiency, reliability and satisfaction. With a team of skilled professionals and years of experience, we strive to stay ahead of industry.
         </p>
       </div>

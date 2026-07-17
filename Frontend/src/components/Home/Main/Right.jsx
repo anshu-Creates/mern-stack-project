@@ -3,8 +3,8 @@
   const Right = () => {
     return (
       <div className='text-center py-5'>
-        <h1 className='text-4xl text-blue-800 font-bold mb-2'>WHY BALAJI HOME SERVICE CENTER ?</h1>
-        <ul className='text-lg text-justify pl-7'>
+        <h1 className='text-4xl text-blue-900 font-bold mb-2'>WHY BALAJI HOME SERVICE CENTER ?</h1>
+        <ul className='text-lg text-blue-800 text-justify pl-7'>
             <li>- Expert in Appliance Repair Services for Thane NCR</li>
             <li>- Trained Engineers from Reputed Major Appliance Brand</li>
             <li>- Upto 90 Days After Service Warranty on All Job Work</li>
