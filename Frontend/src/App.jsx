@@ -1,24 +1,19 @@
-import React from 'react'
-import Home from './components/Home/Home'
-import Services from './components/Services/Services'
-import Reviews from './components/Reviews/Reviews'
-import About from './components/About/About'
-import Features from './components/Features/Features'
-import Contact from './components/Contact/Contact'
-import Footer from './components/Footer/Footer'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Homepage from "./Pages/Homepage";
+import Loginpage from "./Pages/Loginpage";
+import Registerpage from "./Pages/Registerpage";
 
 const App = () => {
   return (
     <div>
-      <Home/>
-      <Services/>
-      <Reviews/>
-      <About />
-      <Features/>
-      <Contact/>
-      <Footer/>
+      <Routes>
+        <Route path="/" element={<Loginpage />} />
+        <Route path="/register" element={<Registerpage />} />
+        <Route path="/home" element={<Homepage />} />
+      </Routes>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

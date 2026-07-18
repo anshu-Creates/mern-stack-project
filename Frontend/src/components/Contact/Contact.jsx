@@ -19,7 +19,7 @@ const Contact = () => {
             <input type="text" placeholder='Email' className='border border-blue-400 placeholder:text-blue-400 p-2 m-2'/>
             <input type="text" placeholder='Phone Numbar' className='border border-blue-400 placeholder:text-blue-400 p-2 m-2'/>
             <input type="text" placeholder='Subject' className='border border-blue-400 placeholder:text-blue-400 p-2 m-2'/>
-            <textarea rows={7} placeholder='Your Mesage' className='border border-blue-400 placeholder:text-blue-400 p-2 m-2'></textarea>
+            <textarea rows={7} placeholder='Your Message' className='border border-blue-400 placeholder:text-blue-400 p-2 m-2'></textarea>
             <Button title='Submit'/>
         </form>
     </div>
