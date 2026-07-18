@@ -1,12 +1,12 @@
 import React from 'react'
-import Logo from './Logo/Logo'
-import Nav from './Nav/Nav'
+import Logo from './Logo'
+import Button from '../../Button'
 
 const Navbar = () => {
   return (
     <div className='flex m-5 py-4 px-10 fixed top-0 w-[97%] rounded-md bg-blue-100 justify-between align-middle'>
         <Logo/>
-        <Nav/>
+        <Button title='Logout'/>
     </div>
   )
 }
