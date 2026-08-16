@@ -26,10 +26,11 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Redirecting to Login Page...</div>;
   }
 
   if (!authenticated) {
+    alert("Please login to access this page !!!");
     return <Navigate to="/" replace />;
   }
 
