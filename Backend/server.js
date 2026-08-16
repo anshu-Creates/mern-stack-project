@@ -25,7 +25,7 @@ app.post('/register', async (req, res) => {
 
         if (existingUser) {
             return res.status(400).json({
-                message: "User already exists !!!"
+                message: "User already exists. Please login to your account !!!"
             });
         } else {
             bcrypt.hash(password, 10, async function (err, hash) {
@@ -52,9 +52,8 @@ app.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            console.log("User not found");
             return res.status(400).json({
-                message: "User not found !!!"
+                message: "User not found, Please register first !!!"
             });
         } else {
             bcrypt.compare(password, user.password, function (err, result) {
@@ -66,7 +65,7 @@ app.post('/login', async (req, res) => {
                     });
                 } else {
                     res.status(400).json({
-                        message: "Invalid password !!!"
+                        message: "Invalid password, Please try again !!!"
                     });
                 }
             });

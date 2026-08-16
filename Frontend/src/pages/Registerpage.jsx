@@ -31,6 +31,7 @@ const Registerpage = () => {
         setnames("");
         setemail("");
         setpassword("");
+        alert("Registration successful, Please login to your account. Redirecting to Login Page...");
         navigate("/");
       } else {
         const errorData = await response.json();

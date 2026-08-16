@@ -28,6 +28,8 @@ const Loginpage = () => {
         navigate("/home");
       } else {
         const errorData = await response.json();
+        setemail("");
+        setpassword("");
         alert(errorData.message);
       }
     } catch (error) {
