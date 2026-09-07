@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/login", {
+    fetch("https://mern-stack-project-hgop.onrender.com/login", {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

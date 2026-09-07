@@ -9,7 +9,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       console.log("Logging out...");
-      const response = await fetch("http://localhost:3000/logout", {
+      const response = await fetch("https://mern-stack-project-hgop.onrender.com/logout", {
         method: "POST",
         credentials: "include"
       });

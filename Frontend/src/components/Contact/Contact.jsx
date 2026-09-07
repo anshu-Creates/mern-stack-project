@@ -20,7 +20,7 @@ const Contact = () => {
       message,
     };
 
-    const response = await fetch("http://localhost:3000/messages", {
+    const response = await fetch("https://mern-stack-project-hgop.onrender.com/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
