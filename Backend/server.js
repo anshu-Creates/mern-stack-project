@@ -102,14 +102,14 @@ app.post('/logout', (req, res) => {
 function isLoggedin(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
-        alert("Please login to access this page !!!");
+        console.log("No token found, Please login to access this page !!!");
         return res.status(401).json({
             message: "Please login to access this page !!!"
         });
     } else {
         jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
             if (err) {
-                alert("Something went wrong, Please login again !!!");
+                console.log("Invalid token, Please login again !!!");
                 return res.status(401).json({
                     message: "Invalid token"
                 });
