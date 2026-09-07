@@ -58,8 +58,8 @@ app.post('/login', async (req, res) => {
         } else {
             bcrypt.compare(password, user.password, function (err, result) {
                 if (result) {
-                    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
-                    res.cookie('token', token, { httpOnly: true });
+                    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
+                    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'None' });
                     res.status(200).json({
                         message: "Login successful, Redirecting to Home Page...",
                     });
