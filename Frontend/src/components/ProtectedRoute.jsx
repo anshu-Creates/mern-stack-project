@@ -1,25 +1,18 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import API_URL from '../api';
+import { apiRequest } from '../api';
 
 const ProtectedRoute = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`${API_URL}/login`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include"
-    })
-      .then(res => {
-        if (res.ok) {
-          setAuthenticated(true);
-        }
+    apiRequest("/login")
+      .then(() => setAuthenticated(true))
+      .catch((requestError) => {
+        setError(requestError.message);
       })
       .finally(() => {
         setLoading(false);
@@ -27,11 +20,13 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <div>Redirecting to Login Page...</div>;
+    return <div>Checking your session...</div>;
   }
 
   if (!authenticated) {
-    alert("Please login to access this page !!!");
+    if (error) {
+      console.error(error);
+    }
     return <Navigate to="/" replace />;
   }
 

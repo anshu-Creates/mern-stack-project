@@ -1,8 +1,7 @@
-import React from "react";
 import Header from "../Header";
 import Button from "../Button";
 import { useState } from "react";
-import API_URL from "../../api";
+import { apiRequest } from "../../api";
 
 const Contact = () => {
   const [names, setNames] = useState("");
@@ -10,6 +9,8 @@ const Contact = () => {
   const [phone, setPhone] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -21,22 +22,24 @@ const Contact = () => {
       message,
     };
 
-    const response = await fetch(`${API_URL}/messages`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const Backdata = await response.json();
-    console.log(Backdata);
-
-    setNames("");
-    setEmail("");
-    setPhone("");
-    setSubject("");
-    setMessage("");
+    setStatus("");
+    setIsSubmitting(true);
+    try {
+      await apiRequest("/messages", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      setNames("");
+      setEmail("");
+      setPhone("");
+      setSubject("");
+      setMessage("");
+      setStatus("Message sent successfully.");
+    } catch (error) {
+      setStatus(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,6 +73,7 @@ const Contact = () => {
           placeholder="Your Name"
           className="border border-blue-400 outline-none text-blue-900  placeholder:text-blue-400 p-2 m-2"
           value={names}
+          required
           onChange={(e) => {
             setNames(e.target.value);
           }}
@@ -79,6 +83,7 @@ const Contact = () => {
           placeholder="Email"
           className="border border-blue-400  outline-none text-blue-900 placeholder:text-blue-400 p-2 m-2"
           value={email}
+          required
           onChange={(e) => {
             setEmail(e.target.value);
           }}
@@ -88,6 +93,7 @@ const Contact = () => {
           placeholder="Phone Numbar"
           className="border border-blue-400  outline-none text-blue-900  placeholder:text-blue-400 p-2 m-2"
           value={phone}
+          required
           onChange={(e) => {
             setPhone(e.target.value);
           }}
@@ -97,6 +103,7 @@ const Contact = () => {
           placeholder="Subject"
           className="border border-blue-400  outline-none text-blue-900  placeholder:text-blue-400 p-2 m-2"
           value={subject}
+          required
           onChange={(e) => {
             setSubject(e.target.value);
           }}
@@ -106,11 +113,13 @@ const Contact = () => {
           placeholder="Your Message"
           className="border border-blue-400  outline-none text-blue-900  placeholder:text-blue-400 p-2 m-2"
           value={message}
+          required
           onChange={(e) => {
             setMessage(e.target.value);
           }}
         ></textarea>
-        <Button title="Submit" />
+        <Button title={isSubmitting ? "Sending..." : "Submit"} />
+        {status && <p className="text-blue-800" role="status">{status}</p>}
       </form>
     </div>
   );

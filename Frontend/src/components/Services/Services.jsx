@@ -1,4 +1,3 @@
-import React from 'react'
 import Servicecard from './Servicecard'
 import Header from '../Header'
 

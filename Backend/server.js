@@ -9,13 +9,21 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
-connectDB();
 const app = express();
+const port = process.env.PORT || 3000;
+const authCookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+    maxAge: 24 * 60 * 60 * 1000
+};
 const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
     .split(",")
     .map((origin) => origin.trim())
     .concat("https://mern-stack-project-seven-lake.vercel.app")
     .filter((origin, index, origins) => origin && origins.indexOf(origin) === index);
+const isNonEmptyString = (value) => typeof value === "string" && value.trim().length > 0;
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -35,63 +43,51 @@ app.get('/', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    try {
-        const { names, email, password } = req.body;
+    const { names, email, password } = req.body;
 
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
-            return res.status(400).json({
-                message: "User already exists. Please login to your account !!!"
-            });
-        } else {
-            bcrypt.hash(password, 10, async function (err, hash) {
-                let newUser = await User.create({
-                    names,
-                    email,
-                    password: hash
-                });
-                res.status(200).json({
-                    message: "Registration successful, Redirecting to Login Page...",
-                });
-            });
-        }
-    } catch (error) {
-        res.status(500).json({
-            message: "Registration failed !!!"
+    if (!isNonEmptyString(names) || !isNonEmptyString(email) ||
+        !isNonEmptyString(password) || password.length < 8) {
+        return res.status(400).json({
+            message: "Name, valid email, and a password of at least 8 characters are required."
         });
     }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const existingUser = await User.findOne({ email: normalizedEmail });
+
+    if (existingUser) {
+        return res.status(409).json({
+            message: "An account with this email already exists."
+        });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({ names, email: normalizedEmail, password: hashedPassword });
+
+    res.status(201).json({
+        message: "Registration successful. Please login to your account."
+    });
 });
 
 app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
+    const { email, password } = req.body;
+    const user = isNonEmptyString(email)
+        ? await User.findOne({ email: email.trim().toLowerCase() })
+        : null;
 
-        if (!user) {
-            return res.status(400).json({
-                message: "User not found, Please register first !!!"
-            });
-        } else {
-            bcrypt.compare(password, user.password, function (err, result) {
-                if (result) {
-                    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
-                    res.cookie('token', token, authCookieOptions);
-                    res.status(200).json({
-                        message: "Login successful, Redirecting to Home Page...",
-                    });
-                } else {
-                    res.status(400).json({
-                        message: "Invalid password, Please try again !!!"
-                    });
-                }
-            });
-        }
-    } catch (error) {
-        res.status(500).json({
-            message: "Login failed !!!"
+    if (!user || !password || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({
+            message: "Invalid email or password."
         });
     }
+
+    const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    );
+    res.cookie('token', token, authCookieOptions);
+    res.json({ message: "Login successful." });
 });
 
 app.get('/login', isLoggedin, async (req, res) => {
@@ -105,7 +101,7 @@ app.get('/login', isLoggedin, async (req, res) => {
 
 app.post('/messages', async (req, res) => {
     const message = await Message.create(req.body);
-    res.json(message);
+    res.status(201).json(message);
 });
 
 app.post('/logout', (req, res) => {
@@ -138,14 +134,34 @@ function isLoggedin(req, res, next) {
     }
 }
 
-const port = process.env.PORT || 3000;
-const authCookieOptions = {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/"
+app.use((error, req, res, next) => {
+    console.error(error);
+
+    if (error.name === "ValidationError") {
+        return res.status(400).json({ message: "Please provide valid input values." });
+    }
+
+    if (error.code === 11000) {
+        return res.status(409).json({ message: "That value is already in use." });
+    }
+
+    res.status(error.status || 500).json({
+        message: "Something went wrong. Please try again later."
+    });
+});
+
+const startServer = async () => {
+    if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET is not configured");
+    }
+
+    await connectDB();
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
 };
 
-app.listen(port, function () {
-    console.log("Server is running on PORT", port);
+startServer().catch((error) => {
+    console.error("Server startup failed:", error);
+    process.exit(1);
 });

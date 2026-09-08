@@ -1,6 +1,6 @@
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom'
-import API_URL from '../../../api'
+import { apiRequest } from '../../../api'
 
 
 const Navbar = () => {
@@ -8,13 +8,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       console.log("Logging out...");
-      const response = await fetch(`${API_URL}/logout`, {
-        method: "POST",
-        credentials: "include"
-      });
-      if (response.ok) {
-        navigate("/", { replace: true });
-      }
+      await apiRequest("/logout", { method: "POST" });
+      navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
     }

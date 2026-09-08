@@ -4,6 +4,16 @@ A full-stack MERN web application developed for **Balaji Repair & Services**, a 
 
 The website allows customers to explore available repair services, view customer reviews, learn about the company, contact the service center, and securely create and access their accounts.
 
+## 🧭 Architecture
+
+The project is deployed as two separate applications:
+
+* **Frontend:** React + Vite on Vercel
+* **Backend:** Express API on Render
+* **Database:** MongoDB Atlas
+
+The browser sends JSON requests to the Render API. After login, the API signs a JWT and stores it in an HTTP-only cookie. The browser sends that cookie with credentialed requests, and backend middleware verifies it before returning protected data. The frontend `ProtectedRoute` calls `GET /login` before rendering `/home`.
+
 ## 🚀 Features
 
 * User Registration
@@ -155,6 +165,8 @@ JWT_SECRET=your_jwt_secret
 FRONTEND_URL=https://your-project.vercel.app
 ```
 
+Use `Backend/.env.example` as the template. Never commit `.env`, database credentials, or JWT secrets.
+
 Then start the backend:
 
 ```bash
@@ -171,6 +183,12 @@ Open another terminal:
 cd Frontend
 npm install
 npm run dev
+```
+
+For local development, copy `Frontend/.env.example` to `Frontend/.env` and set:
+
+```env
+VITE_API_URL=http://localhost:3000
 ```
 
 The frontend will be available through the Vite development server.
@@ -203,6 +221,56 @@ The application includes several authentication and security-related implementat
 * Protected frontend routes
 * Environment variables for sensitive configuration
 * CORS configuration with credentials
+* Input normalization and field length validation
+* One-day JWT expiry
+* Environment-aware cookie settings
+
+## 🚢 Deployment
+
+### Render backend
+
+Set the Render root directory to `Backend` and the start command to `npm start`. Configure these environment variables in Render:
+
+```env
+NODE_ENV=production
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_long_random_secret
+FRONTEND_URL=https://your-project.vercel.app
+```
+
+Render supplies `PORT` automatically. The `/` endpoint returns `{ "status": "ok" }` and can be used as a health check.
+
+### Vercel frontend
+
+Set the Vercel root directory to `Frontend`, build command to `npm run build`, and output directory to `dist`. Add:
+
+```env
+VITE_API_URL=https://your-render-service.onrender.com
+```
+
+The `vercel.json` rewrite sends frontend routes to `index.html`, allowing React Router routes such as `/home` and `/register` to work after a page refresh.
+
+## 🎤 Interview Notes
+
+### Why use JWT in an HTTP-only cookie?
+
+The JWT carries the authenticated user identity and is signed by the backend. An HTTP-only cookie prevents frontend JavaScript from reading the token, reducing the impact of common XSS token theft.
+
+### How is `/home` protected?
+
+`ProtectedRoute` calls `GET /login` with credentials. The backend reads the `token` cookie, verifies the JWT using `JWT_SECRET`, and returns `401` when the token is missing, expired, or invalid. Only a successful response renders `Homepage`.
+
+### Why is CORS configured with a specific origin?
+
+The frontend and backend have different origins. The backend explicitly allows the Vercel origin and enables credentials so cookies can be sent. A wildcard origin cannot be combined with credentialed requests.
+
+### Why hash passwords with bcrypt?
+
+Passwords are never stored directly. bcrypt uses a one-way adaptive hash, so the server compares a submitted password with the stored hash without recovering the original password.
+
+### What would you improve next?
+
+The next production improvements would be request rate limiting, CSRF protection for cookie-authenticated state-changing routes, automated API tests, role-based authorization, and an admin workflow for customer messages.
 
 ## 📚 What I Learned
 
