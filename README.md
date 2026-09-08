@@ -150,8 +150,9 @@ Create a `.env` file inside the `Backend` folder:
 
 ```env
 PORT=3000
-MONGO_URI=your_mongodb_connection_string
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+FRONTEND_URL=https://your-project.vercel.app
 ```
 
 Then start the backend:

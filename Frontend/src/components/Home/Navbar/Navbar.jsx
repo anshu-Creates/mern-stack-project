@@ -2,6 +2,7 @@ import React from 'react'
 import Logo from './Logo'
 import Button from '../../Button'
 import { useNavigate } from 'react-router-dom'
+import API_URL from '../../../api'
 
 
 const Navbar = () => {
@@ -9,7 +10,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       console.log("Logging out...");
-      const response = await fetch("https://mern-stack-project-hgop.onrender.com/logout", {
+      const response = await fetch(`${API_URL}/logout`, {
         method: "POST",
         credentials: "include"
       });

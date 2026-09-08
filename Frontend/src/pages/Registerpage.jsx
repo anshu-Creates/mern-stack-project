@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiUserLine, RiMailLine, RiLockLine } from "@remixicon/react";
+import API_URL from "../api";
 
 const Registerpage = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Registerpage = () => {
     };
 
     try {
-      const response = await fetch("https://mern-stack-project-hgop.onrender.com/register", {
+      const response = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

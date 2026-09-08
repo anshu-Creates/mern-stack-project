@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiMailLine, RiLockLine } from "@remixicon/react";
+import API_URL from "../api";
 
 const Loginpage = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Loginpage = () => {
       password: password,
     };
     try {
-      const response = await fetch("https://mern-stack-project-hgop.onrender.com/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

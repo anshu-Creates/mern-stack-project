@@ -11,11 +11,26 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 connectDB();
 const app = express();
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim());
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error("Origin is not allowed by CORS"));
+    },
+    credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+
+app.get('/', (req, res) => {
+    res.json({ status: "ok" });
+});
 
 app.post('/register', async (req, res) => {
     try {
@@ -121,6 +136,7 @@ function isLoggedin(req, res, next) {
     }
 }
 
-app.listen(process.env.PORT, function () {
-    console.log("Server is running on PORT", process.env.PORT);
+const port = process.env.PORT || 3000;
+app.listen(port, function () {
+    console.log("Server is running on PORT", port);
 });

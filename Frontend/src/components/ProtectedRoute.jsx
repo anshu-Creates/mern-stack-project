@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import API_URL from '../api';
 
 const ProtectedRoute = ({ children }) => {
 
@@ -8,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch("https://mern-stack-project-hgop.onrender.com/login", {
+    fetch(`${API_URL}/login`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

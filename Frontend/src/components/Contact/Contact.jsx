@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../Header";
 import Button from "../Button";
 import { useState } from "react";
+import API_URL from "../../api";
 
 const Contact = () => {
   const [names, setNames] = useState("");
@@ -20,7 +21,7 @@ const Contact = () => {
       message,
     };
 
-    const response = await fetch("https://mern-stack-project-hgop.onrender.com/messages", {
+    const response = await fetch(`${API_URL}/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
