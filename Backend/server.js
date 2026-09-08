@@ -13,7 +13,9 @@ connectDB();
 const app = express();
 const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
     .split(",")
-    .map((origin) => origin.trim());
+    .map((origin) => origin.trim())
+    .concat("https://mern-stack-project-seven-lake.vercel.app")
+    .filter((origin, index, origins) => origin && origins.indexOf(origin) === index);
 
 app.use(cors({
     origin: (origin, callback) => {
