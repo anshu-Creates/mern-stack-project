@@ -76,7 +76,7 @@ app.post('/login', async (req, res) => {
             bcrypt.compare(password, user.password, function (err, result) {
                 if (result) {
                     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
-                    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'None' });
+                    res.cookie('token', token, authCookieOptions);
                     res.status(200).json({
                         message: "Login successful, Redirecting to Home Page...",
                     });
@@ -109,7 +109,7 @@ app.post('/messages', async (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', authCookieOptions);
     res.status(200).json({
         message: "Logout successful, Redirecting to Login Page...",
     });
@@ -139,6 +139,13 @@ function isLoggedin(req, res, next) {
 }
 
 const port = process.env.PORT || 3000;
+const authCookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/"
+};
+
 app.listen(port, function () {
     console.log("Server is running on PORT", port);
 });

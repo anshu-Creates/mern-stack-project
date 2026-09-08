@@ -1,6 +1,4 @@
-import React from 'react'
 import Logo from './Logo'
-import Button from '../../Button'
 import { useNavigate } from 'react-router-dom'
 import API_URL from '../../../api'
 
@@ -15,7 +13,7 @@ const Navbar = () => {
         credentials: "include"
       });
       if (response.ok) {
-        navigate("/");
+        navigate("/", { replace: true });
       }
     } catch (error) {
       console.error(error);
