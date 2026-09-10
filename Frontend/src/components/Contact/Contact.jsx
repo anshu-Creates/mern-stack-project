@@ -1,7 +1,7 @@
 import Header from "../Header";
 import Button from "../Button";
 import { useState } from "react";
-import { apiRequest } from "../../api";
+import API_URL from "../../api";
 
 const Contact = () => {
   const [names, setNames] = useState("");
@@ -21,14 +21,22 @@ const Contact = () => {
       subject,
       message,
     };
-
     setStatus("");
     setIsSubmitting(true);
     try {
-      await apiRequest("/messages", {
+      const response = await fetch(`${API_URL}/messages`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
         body: JSON.stringify(data),
       });
+
+      const Backdata = await response.json();
+      if (!response.ok) {
+        throw new Error(Backdata.message || "Request failed");
+      }
       setNames("");
       setEmail("");
       setPhone("");
@@ -60,7 +68,7 @@ const Contact = () => {
             xyz123@abc.com
           </p>
         </div>
-        <img src="/src/assets/f6.png" alt="contact" className="w-60 h-40" />
+        <img src="/assets/f6.png" alt="contact" className="w-60 h-40" />
       </div>
       <form
         className="flex p-5 flex-col border-2 border-blue-800 my-5"
@@ -119,7 +127,11 @@ const Contact = () => {
           }}
         ></textarea>
         <Button title={isSubmitting ? "Sending..." : "Submit"} />
-        {status && <p className="text-blue-800" role="status">{status}</p>}
+        {status && (
+          <p className="text-blue-800" role="status">
+            {status}
+          </p>
+        )}
       </form>
     </div>
   );

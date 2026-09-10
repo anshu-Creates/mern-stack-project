@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiUserLine, RiMailLine, RiLockLine } from "@remixicon/react";
-import { apiRequest } from "../api";
+import API_URL from "../api";
 
 const Registerpage = () => {
   const navigate = useNavigate();
@@ -23,10 +23,17 @@ const Registerpage = () => {
     setIsSubmitting(true);
 
     try {
-      await apiRequest("/register", {
+      const response = await fetch(`${API_URL}/register`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
       });
+      const Backdata = await response.json();
+      if (!response.ok) {
+        throw new Error(Backdata.message || "Request failed");
+      }
       setnames("");
       setemail("");
       setpassword("");

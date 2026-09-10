@@ -9,14 +9,18 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
+
 const app = express();
+
 const port = process.env.PORT || 3000;
+
 const authCookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
     maxAge: 24 * 60 * 60 * 1000
+
 };
 const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
     .split(",")
@@ -75,7 +79,7 @@ app.post('/login', async (req, res) => {
         ? await User.findOne({ email: email.trim().toLowerCase() })
         : null;
 
-    if (!user || !password || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !isNonEmptyString(password) || !(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({
             message: "Invalid email or password."
         });

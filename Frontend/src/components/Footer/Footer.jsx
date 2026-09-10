@@ -3,7 +3,7 @@ const Footer = () => {
   return (
     <div className="flex justify-around items-center font-mono text-center p-10">
       <div className="w-100 flex flex-col items-center">
-        <img src="/src/assets/logo.jpeg" className="rounded-full h-30 w-40 my-5" alt="logo" />
+        <img src="/assets/logo.jpeg" className="rounded-full h-30 w-40 my-5" alt="logo" />
         <div className="text-blue-800 font-mono">
           <p>
             <span className="font-bold text-blue-900">Address : </span>

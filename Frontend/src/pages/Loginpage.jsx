@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiMailLine, RiLockLine } from "@remixicon/react";
-import { apiRequest } from "../api";
+import API_URL from "../api";
 
 const Loginpage = () => {
   const navigate = useNavigate();
@@ -19,10 +19,18 @@ const Loginpage = () => {
     setError("");
     setIsSubmitting(true);
     try {
-      await apiRequest("/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
         body: JSON.stringify(data),
       });
+      const Backdata = await response.json();
+      if (!response.ok) {
+        throw new Error(Backdata.message || "Request failed");
+      }
       setemail("");
       setpassword("");
       navigate("/home");
@@ -79,7 +87,11 @@ const Loginpage = () => {
         >
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
-        {error && <p className="text-red-600 text-sm" role="alert">{error}</p>}
+        {error && (
+          <p className="text-red-600 text-sm" role="alert">
+            {error}
+          </p>
+        )}
 
         <p className="text-blue-500 ml-2 text-sm font-medium">
           Don't have an Account ?
