@@ -37,6 +37,8 @@ const Loginpage = () => {
     } catch (error) {
       console.error(error);
       setError(error.message);
+      setemail("");
+      setpassword("");
     } finally {
       setIsSubmitting(false);
     }
@@ -75,7 +77,6 @@ const Loginpage = () => {
             value={password}
             onChange={(e) => setpassword(e.target.value)}
             className="w-full border border-blue-400 placeholder:text-blue-400 p-2 m-2 ml-0"
-            minLength={8}
             required
           />
           <RiLockLine className="absolute right-5 top-4 text-sm text-blue-400" />
@@ -88,7 +89,7 @@ const Loginpage = () => {
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
         {error && (
-          <p className="text-red-600 text-sm" role="alert">
+          <p className="text-red-500 ml-2 text-sm" role="alert">
             {error}
           </p>
         )}

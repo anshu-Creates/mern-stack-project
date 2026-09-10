@@ -34,11 +34,15 @@ const Registerpage = () => {
       if (!response.ok) {
         throw new Error(Backdata.message || "Request failed");
       }
+      console.log("Registration successful, Please log in...");
       setnames("");
       setemail("");
       setpassword("");
       navigate("/");
     } catch (error) {
+      setnames("");
+      setemail("");
+      setpassword("");
       console.error(error);
       setError(error.message);
     } finally {
@@ -101,7 +105,7 @@ const Registerpage = () => {
         >
           {isSubmitting ? "Registering..." : "Register"}
         </button>
-        {error && <p className="text-red-600 text-sm" role="alert">{error}</p>}
+        {error && <p className="text-red-500 ml-2 text-sm" role="alert">{error}</p>}
 
         <p className="text-blue-500 ml-2 text-sm font-medium">
           Already have an Account ?
