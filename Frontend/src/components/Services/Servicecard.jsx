@@ -6,7 +6,7 @@ const Servicecard = (props) => {
         <img src={props.src} alt="s1" className='w-full h-50 rounded-xl'/>
         <h4 className='bg-white text-blue-900 py-1 px-3 my-2 text-center text-lg font-semibold'>{props.title}</h4>
         <p className='text-justify text-blue-800 mb-2'>{props.desc}</p>
-        <Button title='Call Now'/>
+        <Button onClick={() => window.location.href = 'tel:+91-9372931778'} title='Call Now'/>
     </div>
   )
 }
